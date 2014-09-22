@@ -67,67 +67,64 @@
     <ClCompile Include="StdAfx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_PiezoStimDeviceplugin.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\Win32\Debug\Moc\moc_PiezoStimDevice_dialog.cpp">
       <Filter>Generated Files\Debug_Win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_PiezoStimDeviceplugin.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\x64\Debug\Moc\moc_PiezoStimDevice_dialog.cpp">
       <Filter>Generated Files\Debug_x64</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_PiezoStimDeviceplugin.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\Win32\Release\Moc\moc_PiezoStimDevice_dialog.cpp">
       <Filter>Generated Files\Release_Win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_PiezoStimDeviceplugin.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\x64\Release\Moc\moc_PiezoStimDevice_dialog.cpp">
       <Filter>Generated Files\Release_x64</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Template\Moc\moc_PiezoStimDeviceplugin.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\Win32\Template\Moc\moc_PiezoStimDevice_dialog.cpp">
       <Filter>Generated Files\Template_Win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Template\Moc\moc_PiezoStimDeviceplugin.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\x64\Template\Moc\moc_PiezoStimDevice_dialog.cpp">
       <Filter>Generated Files\Template_x64</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_PiezoStimDevice_dialog.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\Win32\Debug\Moc\moc_PiezoStimDeviceplugin.cpp">
       <Filter>Generated Files\Debug_Win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_PiezoStimDevice_dialog.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\x64\Debug\Moc\moc_PiezoStimDeviceplugin.cpp">
       <Filter>Generated Files\Debug_x64</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_PiezoStimDevice_dialog.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\Win32\Release\Moc\moc_PiezoStimDeviceplugin.cpp">
       <Filter>Generated Files\Release_Win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_PiezoStimDevice_dialog.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\x64\Release\Moc\moc_PiezoStimDeviceplugin.cpp">
       <Filter>Generated Files\Release_x64</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Template\Moc\moc_PiezoStimDevice_dialog.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\Win32\Template\Moc\moc_PiezoStimDeviceplugin.cpp">
       <Filter>Generated Files\Template_Win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Template\Moc\moc_PiezoStimDevice_dialog.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\x64\Template\Moc\moc_PiezoStimDeviceplugin.cpp">
       <Filter>Generated Files\Template_x64</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_PiezoStimDevice.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\Win32\Debug\Moc\moc_PiezoStimDevice.cpp">
       <Filter>Generated Files\Debug_Win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_PiezoStimDevice.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\x64\Debug\Moc\moc_PiezoStimDevice.cpp">
       <Filter>Generated Files\Debug_x64</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_PiezoStimDevice.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\Win32\Release\Moc\moc_PiezoStimDevice.cpp">
       <Filter>Generated Files\Release_Win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_PiezoStimDevice.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\x64\Release\Moc\moc_PiezoStimDevice.cpp">
       <Filter>Generated Files\Release_x64</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Template\Moc\moc_PiezoStimDevice.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\Win32\Template\Moc\moc_PiezoStimDevice.cpp">
       <Filter>Generated Files\Template_Win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Template\Moc\moc_PiezoStimDevice.cpp">
+    <ClCompile Include="..\Build_MSVC\Qt\x64\Template\Moc\moc_PiezoStimDevice.cpp">
       <Filter>Generated Files\Template_x64</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StdAfx.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_PiezoStimDevice_dialog.h">
-      <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
@@ -143,6 +140,9 @@
     </ClInclude>
     <ClInclude Include="QuaeroSys\StimLibV2-0.3.3-Win\stimlibrel.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_PiezoStimDevice_dialog.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
