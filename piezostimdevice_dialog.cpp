@@ -17,7 +17,7 @@
 //
 
 
-#include "PiezoStimDevice_dialog.h"
+#include "piezostimdevice_dialog.h"
 
 PiezoStimDevice_Dialog::PiezoStimDevice_Dialog(QWidget *parent)	: QDialog(parent)
 {

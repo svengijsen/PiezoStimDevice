@@ -17,8 +17,8 @@
 //
 
 
-#include "PiezoStimDeviceplugin.h"
-#include "PiezoStimDevice.h"
+#include "piezostimdeviceplugin.h"
+#include "piezostimdevice.h"
 #include "defines.h"
 
 Q_DECLARE_METATYPE(PiezoStimDevice*)

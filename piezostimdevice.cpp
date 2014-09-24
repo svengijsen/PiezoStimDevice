@@ -17,7 +17,7 @@
 //
 
 
-#include "PiezoStimDevice.h"
+#include "piezostimdevice.h"
 
 QScriptValue PiezoStimDevice::ctor__extensionname(QScriptContext* context, QScriptEngine* engine)
 {

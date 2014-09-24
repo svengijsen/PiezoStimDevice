@@ -26,8 +26,8 @@
 #include <Qlibrary>
 
 #include "plugininterface.h"
-#include "PiezoStimDevice_dialog.h"
-#include "PiezoStimDevice.h"
+#include "piezostimdevice_dialog.h"
+#include "piezostimdevice.h"
 #include "defines.h"
 
 QT_BEGIN_NAMESPACE
@@ -36,7 +36,7 @@ QT_END_NAMESPACE
 class PiezoStimDevicePlugin : public QObject, DeviceInterface
 {
     Q_OBJECT
-	Q_PLUGIN_METADATA(IID "BrainStim.Plugins.Devices" "PiezoStimDevice.json")
+	Q_PLUGIN_METADATA(IID "BrainStim.Plugins.Devices" "piezostimdevice.json")
     Q_INTERFACES(DeviceInterface)
 
 public:

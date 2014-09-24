@@ -55,16 +55,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PiezoStimDevice.cpp">
+    <ClCompile Include="piezostimdevice_dialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PiezoStimDevice_dialog.cpp">
+    <ClCompile Include="piezostimdeviceplugin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PiezoStimDeviceplugin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StdAfx.cpp">
+    <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Build_MSVC\Qt\Win32\Debug\Moc\moc_PiezoStimDevice_dialog.cpp">
@@ -121,9 +118,12 @@
     <ClCompile Include="..\Build_MSVC\Qt\x64\Template\Moc\moc_PiezoStimDevice.cpp">
       <Filter>Generated Files\Template_x64</Filter>
     </ClCompile>
+    <ClCompile Include="piezostimdevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="StdAfx.h">
+    <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
@@ -135,7 +135,7 @@
     <ClInclude Include="..\..\BrainStim\plugininterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CustomScriptObjects.h">
+    <ClInclude Include="customscriptobjects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="QuaeroSys\StimLibV2-0.3.3-Win\stimlibrel.h">
@@ -146,24 +146,24 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="PiezoStimDevice.h">
+    <CustomBuild Include="piezostimdevice.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="PiezoStimDevice_dialog.h">
+    <CustomBuild Include="piezostimdevice_dialog.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="PiezoStimDeviceplugin.h">
+    <CustomBuild Include="piezostimdeviceplugin.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="PiezoStimDevice_dialog.ui">
+    <CustomBuild Include="piezostimdevice_dialog.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="PiezoStimDeviceplugin.rc" />
+    <ResourceCompile Include="piezostimdeviceplugin.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="licenseHeader.licenseheader" />
-    <None Include="PiezoStimDevice.json" />
+    <None Include="licenseheader.licenseheader" />
+    <None Include="piezostimdevice.json" />
   </ItemGroup>
 </Project>
