@@ -9,7 +9,7 @@ var dDouble = 1.87;
 
 //Construct a BrainStim Plugin KeyBoard Object
 var KeyBoardCaptureObj = new KeyBoardCapture(); 
-var activationArray = Array[];
+var activationArray = new Array();
 
 ////Test whether we can invoke some standard template example slots
 //PiezoStimDeviceobject.setExampleProperty(99);
