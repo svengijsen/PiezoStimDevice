@@ -23,7 +23,7 @@ PiezoStimDevice_Dialog::PiezoStimDevice_Dialog(QWidget *parent)	: QDialog(parent
 {
 	//Gets constructed only once during the load of the plugin
 	ui.setupUi(this);
-	connect(ui.btnExampleButton, SIGNAL(clicked()), this, SLOT(exampleButton_Pressed()));
+	//connect(ui.btnExampleButton, SIGNAL(clicked()), this, SLOT(exampleButton_Pressed()));
 }
 
 PiezoStimDevice_Dialog::~PiezoStimDevice_Dialog()
