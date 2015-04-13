@@ -121,6 +121,9 @@
     <ClCompile Include="piezostimdevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\qrc_piezostimdeviceplugin.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -158,6 +161,9 @@
     <CustomBuild Include="piezostimdevice_dialog.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="piezostimdeviceplugin.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="piezostimdeviceplugin.rc" />
@@ -165,5 +171,17 @@
   <ItemGroup>
     <None Include="licenseheader.licenseheader" />
     <None Include="piezostimdevice.json" />
+    <None Include="resources\piezostimdeviceplugin_Win32_Debug.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\piezostimdeviceplugin_Win32_Release.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\piezostimdeviceplugin_x64_Debug.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\piezostimdeviceplugin_x64_Release.ini">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
