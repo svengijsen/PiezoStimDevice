@@ -1,3 +1,8 @@
+Include("JavaScript/underscore.js");
+Include("MainControlDialog.qs");
+//Add and clear a new output window tab
+BrainStim.addOutputWindow("PiezoStim");
+BrainStim.clearOutputWindow("PiezoStim");
 //Construct a new Plugin object
 var PiezoStimDeviceobject = new PiezoStimDevice();
 var sLicenseCode = "";//Please fill-in your license code here!
@@ -6,10 +11,35 @@ var nRetval;
 var nInteger = 1;
 var sString = "Test";
 var dDouble = 1.87;
+var activationArray = [];
 
-//Construct a BrainStim Plugin KeyBoard Object
-var KeyBoardCaptureObj = new KeyBoardCapture(); 
-var activationArray = new Array();
+mainDialog = new Dialog();
+mainDialog.show();
+
+//Set the dialogs title
+mainDialog.windowTitle = "Custom Menu Dialog Title";
+//Create and configure Layout
+var customLayout = new QGridLayout;
+customLayout.setColumnStretch(1, 1);	
+customLayout.setColumnMinimumWidth(1, 500);
+//Create and configure new label
+var customLabel1 = new QLabel;
+customLabel1.setFrameStyle(QFrame.Sunken | QFrame.Panel);
+//Create and configure new button
+var customButton1 = new QPushButton("Button #1");
+//Add created controls to layout and set the new layout
+customLayout.addWidget(customButton1, 0, 0);
+customLayout.addWidget(customLabel1, 0, 1);
+mainDialog.setLayout(customLayout);
+
+//*!The below wrapper function can use the compose method because the original function has one or no parameters
+Dialog.prototype.closeEvent = _.compose(mainDialog.closeEvent, function()//this function is first called, afterwards the original function
+{
+	Log("Dialog closeEvent() (wrapped) called");
+	ScriptCleanupFunction();
+	//*!Return the first argument if there is one defined
+	return;
+})
 
 ////Test whether we can invoke some standard template example slots
 //PiezoStimDeviceobject.setExampleProperty(99);
@@ -20,22 +50,24 @@ var activationArray = new Array();
 //This function makes sure that everything gets nicely cleaned before the script ends
 function ScriptCleanupFunction()//Cleanup
 {
-	KeyBoardCaptureObj.StopCaptureThread();
-	//Disconnect the signal/slots
-	KeyBoardCaptureObj.CaptureThreadKeyPressed.disconnect(this, this.KeyCaptureDetectFunction);
 	//Set all constructed objects to null 
-	KeyBoardCaptureObj = null;
 	PiezoStimDeviceobject = null;
 	activationArray = null;
 	//Set all functions to null
-	KeyCaptureDetectFunction = null;
-	ScriptCleanupFunction = null;
 	PiezoStimulation = null;
+	//Close the dialog
+	if(mainDialog)
+	{
+		mainDialog.close();
+		mainDialog = null;
+	}
+	ScriptCleanupFunction = null;
 	//Write something to the Log Output Pane so we know that this Function executed successfully.
 	Log("\nFinished script Cleanup!");
 	BrainStim.cleanupScript();
 }
 
+/*
 //This function is called whenever the user presses a key
 function KeyCaptureDetectFunction(keyCode)
 {
@@ -87,6 +119,7 @@ function KeyCaptureDetectFunction(keyCode)
 		ScriptCleanupFunction();
 	}
 }
+*/
 
 function PiezoStimulation(TriggerValue)
 {	
@@ -107,9 +140,9 @@ function PiezoStimulation(TriggerValue)
 	Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - setDAC()");
 }
 
-KeyBoardCaptureObj.CaptureThreadKeyPressed.connect(this, this.KeyCaptureDetectFunction);
-KeyBoardCaptureObj.StartCaptureThread(0, true);
-Log("");
+//KeyBoardCaptureObj.CaptureThreadKeyPressed.connect(this, this.KeyCaptureDetectFunction);
+//KeyBoardCaptureObj.StartCaptureThread(0, true);
+//Log("");
 
 
 
