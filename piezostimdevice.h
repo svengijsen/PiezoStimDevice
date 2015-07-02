@@ -32,6 +32,9 @@
 #define LIBRARYLOADFAILEDMESSAGE		"The " LIBRARYFILENAME " library could not be loaded!"
 #define RETURNCODETABLEVALUEUNAVAILABLE	"Return Code Lookup Table value is unavailable"
 
+#define RETURNCODE_NOTINITIALIZED		-99
+#define RETURNCODE_FAILEDTOINITIALIZE	1102
+
 typedef int (*MyPrototype_initStimulator)(char *);
 typedef int (*MyPrototype_closeStimulator)();
 typedef int (*MyPrototype_resetStimulator)();
@@ -362,6 +365,7 @@ private:
 	QMap<int,QString> mReturnCodes;
 
 	bool bLibraryIsLoaded;
+	bool bIsInitialized;
 	bool bStopLibraryLoading;
 	QLibrary *libPiezoStim;
 

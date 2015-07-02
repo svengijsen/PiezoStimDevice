@@ -1,5 +1,5 @@
 Include("JavaScript/underscore.js");
-Include("MainControlDialog.qs");
+Include("QtScript/MainControlDialog.qs");
 //Add and clear a new output window tab
 BrainStim.addOutputWindow("PiezoStim");
 BrainStim.clearOutputWindow("PiezoStim");
@@ -17,20 +17,42 @@ mainDialog = new Dialog();
 mainDialog.show();
 
 //Set the dialogs title
-mainDialog.windowTitle = "Custom Menu Dialog Title";
+mainDialog.windowTitle = "PiezoStim Device example";
 //Create and configure Layout
 var customLayout = new QGridLayout;
 customLayout.setColumnStretch(1, 1);	
 customLayout.setColumnMinimumWidth(1, 500);
-//Create and configure new label
-var customLabel1 = new QLabel;
-customLabel1.setFrameStyle(QFrame.Sunken | QFrame.Panel);
-//Create and configure new button
-var customButton1 = new QPushButton("Button #1");
+//Create and configure some new labels
+mainDialog.customLabel1 = new QLabel;
+mainDialog.customLabel1.setFrameStyle(QFrame.Sunken | QFrame.Panel);
+mainDialog.customLabel2 = new QLabel;
+mainDialog.customLabel2.setFrameStyle(QFrame.Sunken | QFrame.Panel);
+mainDialog.customLabel3 = new QLabel;
+mainDialog.customLabel3.setFrameStyle(QFrame.Sunken | QFrame.Panel);
+mainDialog.customLabel4 = new QLabel;
+mainDialog.customLabel4.setFrameStyle(QFrame.Sunken | QFrame.Panel);
+mainDialog.customLabel5 = new QLabel;
+mainDialog.customLabel5.setFrameStyle(QFrame.Sunken | QFrame.Panel);
+//Create and configure some new buttons
+mainDialog.customButton1 = new QPushButton("Button #1");
+mainDialog.customButton2 = new QPushButton("Button #2");
+mainDialog.customButton3 = new QPushButton("Button #3");
+mainDialog.customButton4 = new QPushButton("Button #4");
+mainDialog.customButton5 = new QPushButton("Button #5");
 //Add created controls to layout and set the new layout
-customLayout.addWidget(customButton1, 0, 0);
-customLayout.addWidget(customLabel1, 0, 1);
+customLayout.addWidget(mainDialog.customButton1, 0, 0);
+customLayout.addWidget(mainDialog.customLabel1, 0, 1);
+customLayout.addWidget(mainDialog.customButton2, 1, 0);
+customLayout.addWidget(mainDialog.customLabel2, 1, 1);
+customLayout.addWidget(mainDialog.customButton3, 2, 0);
+customLayout.addWidget(mainDialog.customLabel3, 2, 1);
+customLayout.addWidget(mainDialog.customButton4, 3, 0);
+customLayout.addWidget(mainDialog.customLabel4, 3, 1);
+customLayout.addWidget(mainDialog.customButton5, 4, 0);
+customLayout.addWidget(mainDialog.customLabel5, 4, 1);
+
 mainDialog.setLayout(customLayout);
+ConnectDisconnectScriptFunctions(true);
 
 //*!The below wrapper function can use the compose method because the original function has one or no parameters
 Dialog.prototype.closeEvent = _.compose(mainDialog.closeEvent, function()//this function is first called, afterwards the original function
@@ -41,20 +63,140 @@ Dialog.prototype.closeEvent = _.compose(mainDialog.closeEvent, function()//this 
 	return;
 })
 
-////Test whether we can invoke some standard template example slots
-//PiezoStimDeviceobject.setExampleProperty(99);
-//Log("	 +PiezoStimDeviceobject.getExampleProperty());
-//PiezoStimDeviceobject.ExampleProperty = 0;
-//Log("	 +PiezoStimDeviceobject.ExampleProperty);
+function ConnectDisconnectScriptFunctions(Connect)
+//This function can connect or disconnect all signal/slot connections defined by the boolean parameter 
+{
+	if(Connect) //This parameter defines whether we should connect or disconnect the signal/slots.
+	{
+		Log("... Connecting Signal/Slots");
+		try 
+		{	
+			mainDialog.customButton1["clicked()"].connect(this, this.customButton1Pressed);
+			mainDialog.customButton2["clicked()"].connect(this, this.customButton2Pressed);
+			mainDialog.customButton3["clicked()"].connect(this, this.customButton3Pressed);
+			mainDialog.customButton4["clicked()"].connect(this, this.customButton4Pressed);
+			mainDialog.customButton5["clicked()"].connect(this, this.customButton5Pressed);
+		} 
+		catch (e) 
+		{
+			Log(".*. Something went wrong connecting the Signal/Slots:" + e); //If a connection fails warn the user!
+		}
+	}
+	else
+	{
+		Log("... Disconnecting Signal/Slots");
+		try 
+		{	
+			mainDialog.customButton1["clicked()"].disconnect(this, this.customButton1Pressed);
+			mainDialog.customButton2["clicked()"].disconnect(this, this.customButton2Pressed);
+			mainDialog.customButton3["clicked()"].disconnect(this, this.customButton3Pressed);
+			mainDialog.customButton4["clicked()"].disconnect(this, this.customButton4Pressed);
+			mainDialog.customButton5["clicked()"].disconnect(this, this.customButton5Pressed);			
+		} 
+		catch (e) 
+		{
+			Log(".*. Something went wrong disconnecting the Signal/Slots:" + e); //If a disconnection fails warn the user!
+		}		
+	}	
+}
+
+function customButton1Pressed()
+{
+	customButtonPressed(1);
+}
+
+function customButton2Pressed()
+{
+	customButtonPressed(2);
+}
+
+function customButton3Pressed()
+{
+	customButtonPressed(3);
+}
+
+function customButton4Pressed()
+{
+	customButtonPressed(4);
+}
+
+function customButton5Pressed()
+{
+	customButtonPressed(5);
+}
+
+function customButtonPressed(nIndex)
+{
+	Log("Button #" + nIndex + " was pressed.");
+	if(nIndex==1)
+	{
+		Log("- Configure Stimulator....");
+		nRetval = PiezoStimDeviceobject.closeStimulator();
+		Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - closeStimulator()");
+		if(nRetval==0)
+		{
+			nRetval = PiezoStimDeviceobject.setProperty("local_buffer_size" , 5000000 );		//PC buffer in bytes (default 50 000). This property must be set before initStimulator
+			Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - setProperty()");
+			if(nRetval==0)
+			{		
+				nRetval = PiezoStimDeviceobject.initStimulator(sLicenseCode);
+				Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - initStimulator()");
+				Log(nRetval);
+				if(nRetval==0)
+				{
+					nRetval = PiezoStimDeviceobject.setTriggerMode(16, 1, 1); 					//slot (address of controller), port (0=in, 1=out), mode(1=rising edge, 0=falling)
+					Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - setTriggerMode()");
+					nRetval = PiezoStimDeviceobject.setTriggerLength(16, 1, 50);					//slot, port, duration of trigger (multiples of 0.5ms)
+					Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - setTriggerLength()");
+					//nRetval = PiezoStimDeviceobject.setDAC(1 , 4095);
+					//Log("	 +PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - ");
+					nRetval = PiezoStimDeviceobject.setPinBlock10(0, 1, 1, 1, 1, 1, 1 ,1 ,1 ,1 ,1 ,1);		
+					Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - setPinBlock10()");
+				}
+			}
+		}
+	}
+	else if(nIndex==2)
+	{
+		Log("- Programming....");
+		PiezoStimulation(1);	
+	}
+	else if(nIndex==3)
+	{
+		Log("- Start Stimulation....");
+		nRetval = PiezoStimDeviceobject.startStimulation();
+		Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - startStimulation()");
+	}
+	else if(nIndex==4)
+	{
+		Log("- Stop Stimulation....");
+		nRetval = PiezoStimDeviceobject.stopStimulation();
+		Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - stopStimulation()");		
+	}
+	else if(nIndex==5)
+	{
+		Log("- Resetting....");
+		nRetval = PiezoStimDeviceobject.resetStimulator();
+		Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - resetStimulator()");
+	}	
+}
 
 //This function makes sure that everything gets nicely cleaned before the script ends
 function ScriptCleanupFunction()//Cleanup
 {
+	ConnectDisconnectScriptFunctions(false);
 	//Set all constructed objects to null 
 	PiezoStimDeviceobject = null;
 	activationArray = null;
 	//Set all functions to null
 	PiezoStimulation = null;
+	ConnectDisconnectScriptFunctions = null;
+	customButton1Pressed = null;
+	customButton2Pressed = null;
+	customButton3Pressed = null;
+	customButton4Pressed = null;
+	customButton5Pressed = null;
+	customButtonPressed = null;
 	//Close the dialog
 	if(mainDialog)
 	{
@@ -66,60 +208,6 @@ function ScriptCleanupFunction()//Cleanup
 	Log("\nFinished script Cleanup!");
 	BrainStim.cleanupScript();
 }
-
-/*
-//This function is called whenever the user presses a key
-function KeyCaptureDetectFunction(keyCode)
-{
-	Log("A key press was detected: " + keyCode); 	
-	
-	if (keyCode==118)//F7 key
-	{
-		Log("- Configure Stimulator....");
-		nRetval = PiezoStimDeviceobject.closeStimulator();
-		Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - closeStimulator()");
-		nRetval = PiezoStimDeviceobject.setProperty("local_buffer_size" , 5000000 );		//PC buffer in bytes (default 50 000). This property must be set before initStimulator
-		Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - setProperty()");
-		nRetval = PiezoStimDeviceobject.initStimulator(sLicenseCode);
-		Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - initStimulator()");
-		nRetval = PiezoStimDeviceobject.setTriggerMode(16, 1, 1); 					//slot (address of controller), port (0=in, 1=out), mode(1=rising edge, 0=falling)
-		Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - setTriggerMode()");
-		nRetval = PiezoStimDeviceobject.setTriggerLength(16, 1, 50);					//slot, port, duration of trigger (multiples of 0.5ms)
-		Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - setTriggerLength()");
-		//nRetval = PiezoStimDeviceobject.setDAC(1 , 4095);
-		//Log("	 +PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - ");
-		nRetval = PiezoStimDeviceobject.setPinBlock10(0, 1, 1, 1, 1, 1, 1 ,1 ,1 ,1 ,1 ,1);		
-		Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - setPinBlock10()");
-	}
-	else if (keyCode==119)//F8 key
-	{
-		Log("- Programming....");
-		PiezoStimulation(1);	
-	}
-	else if (keyCode==120)//F9 key
-	{	
-		Log("- Start Stimulation....");
-		nRetval = PiezoStimDeviceobject.startStimulation();
-		Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - startStimulation()");		
-	}
-	else if (keyCode==121)//F10 key
-	{
-		Log("- Stop Stimulation....");
-		nRetval = PiezoStimDeviceobject.stopStimulation();
-		Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - stopStimulation()");	
-	}
-	else if (keyCode==122)//F11 key
-	{
-		Log("- Resetting....");
-		nRetval = PiezoStimDeviceobject.resetStimulator();
-		Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - resetStimulator()");	
-	}
-	else if (keyCode==27)//Escape key
-	{			
-		ScriptCleanupFunction();
-	}
-}
-*/
 
 function PiezoStimulation(TriggerValue)
 {	
@@ -139,12 +227,6 @@ function PiezoStimulation(TriggerValue)
 	nRetval = PiezoStimDeviceobject.setDAC(1 , 0);
 	Log("\t" + PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - setDAC()");
 }
-
-//KeyBoardCaptureObj.CaptureThreadKeyPressed.connect(this, this.KeyCaptureDetectFunction);
-//KeyBoardCaptureObj.StartCaptureThread(0, true);
-//Log("");
-
-
 
 //nRetval = PiezoStimDeviceobject.setProperty(sString , nInteger );
 //Log("	 +PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - ");
@@ -201,10 +283,6 @@ function PiezoStimulation(TriggerValue)
 //nRetval = PiezoStimDeviceobject.set2PDHeight(nInteger , nInteger , nInteger );
 //Log("	 +PiezoStimDeviceobject.ReturnCodeToString(nRetval) + " - ");
 
-
-//Log();
-//Set the constructed object to null
-//PiezoStimDeviceobject = null;
 
 //	QString ReturnCodeToString(const int &nRetval);
 //	int initStimulator(const QString &sLicense);

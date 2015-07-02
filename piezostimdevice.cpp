@@ -30,6 +30,7 @@ PiezoStimDevice::PiezoStimDevice(QObject *parent) : QObject(parent)
 	currentScriptEngine = NULL;
 	libPiezoStim = NULL;
 	bLibraryIsLoaded = false;
+	bIsInitialized = false;
 	bStopLibraryLoading = false;
 }
 
@@ -58,14 +59,18 @@ bool PiezoStimDevice::LoadPiezoLibrary(const QString &sFileName)
 	{
 		if (QLibrary::isLibrary(sFileName)) 
 		{
+			
 			libPiezoStim = new QLibrary(sFileName);
-			bLibraryIsLoaded = libPiezoStim->load();
-			if(bLibraryIsLoaded == false)
-			{
-				qDebug() << __FUNCTION__ << libPiezoStim->errorString();
-				bStopLibraryLoading = true;
-				return false;
-			}
+			//if (libPiezoStim->isLoaded() == false)
+			//{
+				bLibraryIsLoaded = libPiezoStim->load();
+				if (bLibraryIsLoaded == false)
+				{
+					qDebug() << __FUNCTION__ << libPiezoStim->errorString();
+					bStopLibraryLoading = true;
+					return false;
+				}
+			//}
 			if(resolveFunctionSignatures())
 				setupReturnCodesTable();
 			else
@@ -91,6 +96,7 @@ void PiezoStimDevice::UnloadPiezoLibrary()
 		libPiezoStim = NULL;
 	}
 	bLibraryIsLoaded = false;
+	bIsInitialized = false;
 	bStopLibraryLoading = true;
 	mReturnCodes.clear();
 }
@@ -129,6 +135,8 @@ void PiezoStimDevice::setupReturnCodesTable()
 	mReturnCodes.insert(E_1600,"E_1600");
 	mReturnCodes.insert(E_1700,"E_1700");
 	mReturnCodes.insert(E_1800,"E_1800");
+	mReturnCodes.insert(RETURNCODE_NOTINITIALIZED, "NOT_INITIALIZED");
+	mReturnCodes.insert(RETURNCODE_FAILEDTOINITIALIZE, "FAILED_TO_INITIALIZE");
 }
 
 bool PiezoStimDevice::resolveFunctionSignatures()
@@ -245,10 +253,14 @@ bool PiezoStimDevice::resolveFunctionSignatures()
 
 int PiezoStimDevice::initStimulator(const QString &sLicense)
 {
+	if (bIsInitialized)
+		return 0;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		QByteArray baLicense = sLicense.toLocal8Bit();
 		int nRetval = MyFunction_initStimulator(baLicense.data());
+		if (nRetval == 0)
+			bIsInitialized = true;
 		return nRetval;
 	}
 	return -1;
@@ -259,6 +271,8 @@ int PiezoStimDevice::closeStimulator()
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_closeStimulator();
+		if (nRetval == 0)
+			bIsInitialized = false;
 		return nRetval;
 	}
 	return 0;
@@ -266,6 +280,8 @@ int PiezoStimDevice::closeStimulator()
 
 int PiezoStimDevice::resetStimulator() 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_resetStimulator();
@@ -276,7 +292,9 @@ int PiezoStimDevice::resetStimulator()
 
 int PiezoStimDevice::setProperty(char* property, uint32_t value) 
 {
-	if(LoadPiezoLibrary(LIBRARYFILENAME))
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
+	if (LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_setProperty(property,value);
 		return nRetval;
@@ -286,7 +304,9 @@ int PiezoStimDevice::setProperty(char* property, uint32_t value)
 
 int PiezoStimDevice::getProperty(char* property) 
 {
-	if(LoadPiezoLibrary(LIBRARYFILENAME))
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
+	if (LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_getProperty(property);
 		return nRetval;
@@ -296,7 +316,9 @@ int PiezoStimDevice::getProperty(char* property)
 
 int PiezoStimDevice::startStimulation() 
 {
-	if(LoadPiezoLibrary(LIBRARYFILENAME))
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
+	if (LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_startStimulation();
 		return nRetval;
@@ -306,6 +328,8 @@ int PiezoStimDevice::startStimulation()
 
 int PiezoStimDevice::stopStimulation() 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_stopStimulation();
@@ -316,6 +340,8 @@ int PiezoStimDevice::stopStimulation()
 
 int PiezoStimDevice::setDAC(uint8_t dac, uint16_t wert) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_setDAC(dac,wert);
@@ -326,6 +352,8 @@ int PiezoStimDevice::setDAC(uint8_t dac, uint16_t wert)
 
 int PiezoStimDevice::setPinBlock8(uint8_t slot, uint8_t int_trigger, uint8_t pin0, uint8_t pin1, uint8_t pin2, uint8_t pin3, uint8_t pin4, uint8_t pin5, uint8_t pin6, uint8_t pin7) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_setPinBlock8(slot, int_trigger, pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7);
@@ -336,6 +364,8 @@ int PiezoStimDevice::setPinBlock8(uint8_t slot, uint8_t int_trigger, uint8_t pin
 
 int PiezoStimDevice::setPinBlock(uint8_t slot, uint8_t int_trigger, uint8_t pin0, uint8_t pin1, uint8_t pin2, uint8_t pin3, uint8_t pin4, uint8_t pin5, uint8_t pin6, uint8_t pin7) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_setPinBlock(slot, int_trigger, pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7);
@@ -346,6 +376,8 @@ int PiezoStimDevice::setPinBlock(uint8_t slot, uint8_t int_trigger, uint8_t pin0
 
 int PiezoStimDevice::setPinBlock10(uint8_t slot, uint8_t int_trigger, uint8_t pin0, uint8_t pin1, uint8_t pin2, uint8_t pin3, uint8_t pin4, uint8_t pin5, uint8_t pin6, uint8_t pin7, uint8_t pin8, uint8_t pin9) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_setPinBlock10(slot, int_trigger, pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7, pin8, pin9);
@@ -356,6 +388,8 @@ int PiezoStimDevice::setPinBlock10(uint8_t slot, uint8_t int_trigger, uint8_t pi
 
 int PiezoStimDevice::wait(uint8_t int_trigger, uint32_t time) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_wait(int_trigger, time);
@@ -366,6 +400,8 @@ int PiezoStimDevice::wait(uint8_t int_trigger, uint32_t time)
 
 int PiezoStimDevice::setVar(uint8_t var, uint16_t value) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_setVar(var, value);
@@ -376,6 +412,8 @@ int PiezoStimDevice::setVar(uint8_t var, uint16_t value)
 
 int PiezoStimDevice::setVarImmediate(uint8_t var, uint16_t value) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_setVarImmediate(var, value);
@@ -386,6 +424,8 @@ int PiezoStimDevice::setVarImmediate(uint8_t var, uint16_t value)
 
 uint16_t PiezoStimDevice::getVarImmediate(uint8_t var) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		uint16_t nRetval = MyFunction_getVarImmediate(var);
@@ -396,6 +436,8 @@ uint16_t PiezoStimDevice::getVarImmediate(uint8_t var)
 
 int PiezoStimDevice::incVar(uint8_t var) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_incVar(var);
@@ -406,6 +448,8 @@ int PiezoStimDevice::incVar(uint8_t var)
 
 int PiezoStimDevice::decVar(uint8_t var) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_decVar(var);
@@ -416,6 +460,8 @@ int PiezoStimDevice::decVar(uint8_t var)
 
 int PiezoStimDevice::outPort8(uint8_t slot, uint8_t port, uint8_t value) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_outPort8(slot, port, value);
@@ -426,6 +472,8 @@ int PiezoStimDevice::outPort8(uint8_t slot, uint8_t port, uint8_t value)
 
 int PiezoStimDevice::outPort16(uint8_t slot, uint8_t portH, uint8_t portL, uint16_t value) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_outPort16(slot, portH, portL, value);
@@ -436,6 +484,8 @@ int PiezoStimDevice::outPort16(uint8_t slot, uint8_t portH, uint8_t portL, uint1
 
 int PiezoStimDevice::outPortVar16(uint8_t slot, uint8_t portH, uint8_t portL, uint8_t var) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_outPortVar16(slot, portH, portL, var);
@@ -446,6 +496,8 @@ int PiezoStimDevice::outPortVar16(uint8_t slot, uint8_t portH, uint8_t portL, ui
 
 int PiezoStimDevice::inPortVar16(uint8_t slot, uint8_t portH, uint8_t portL, uint8_t var) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_inPortVar16(slot, portH, portL, var);
@@ -456,6 +508,8 @@ int PiezoStimDevice::inPortVar16(uint8_t slot, uint8_t portH, uint8_t portL, uin
 
 int PiezoStimDevice::setTriggerMode(uint8_t slot, uint8_t port, uint8_t mode) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_setTriggerMode(slot, port, mode);
@@ -466,6 +520,8 @@ int PiezoStimDevice::setTriggerMode(uint8_t slot, uint8_t port, uint8_t mode)
 
 int PiezoStimDevice::setTriggerLength(uint8_t slot, uint8_t port, uint8_t length) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_setTriggerLength(slot,port,length);
@@ -476,6 +532,8 @@ int PiezoStimDevice::setTriggerLength(uint8_t slot, uint8_t port, uint8_t length
 
 int PiezoStimDevice::waitForTrigger(uint8_t slot, uint8_t port) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_waitForTrigger(slot,port);
@@ -486,16 +544,20 @@ int PiezoStimDevice::waitForTrigger(uint8_t slot, uint8_t port)
 
 int PiezoStimDevice::triggerOut(uint8_t slot, uint8_t port) 
 {
-		if(LoadPiezoLibrary(LIBRARYFILENAME))
-		{
-			int nRetval = MyFunction_triggerOut(slot,port);
-			return nRetval;
-		}
-		return 0;
+	if (bIsInitialized == false)
+	return RETURNCODE_NOTINITIALIZED;
+	if(LoadPiezoLibrary(LIBRARYFILENAME))
+	{
+		int nRetval = MyFunction_triggerOut(slot,port);
+		return nRetval;
+	}
+	return 0;
 }
 
 int PiezoStimDevice::set2PDProperties(uint8_t module, uint8_t slot, uint8_t subslot, uint8_t dac_x, uint8_t dac_z0, uint8_t dac_z1) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_set2PDProperties(module, slot, subslot, dac_x, dac_z0, dac_z1);
@@ -506,6 +568,8 @@ int PiezoStimDevice::set2PDProperties(uint8_t module, uint8_t slot, uint8_t subs
 
 int PiezoStimDevice::set2PDCalibrationX(uint8_t module, uint16_t homeDACPos, double co0, double co1, double co2, double co3, double co4, double co5, double co6, double co7, double co8, double co9) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_set2PDCalibrationX(module, homeDACPos, co0, co1, co2, co3, co4, co5, co6, co7, co8, co9);
@@ -516,6 +580,8 @@ int PiezoStimDevice::set2PDCalibrationX(uint8_t module, uint16_t homeDACPos, dou
 
 int PiezoStimDevice::set2PDCalibrationZ(uint8_t module, double Z0_co0, double Z0_co1, double Z1_co0, double Z1_co1) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_set2PDCalibrationZ(module, Z0_co0, Z0_co1, Z1_co0, Z1_co1);
@@ -526,6 +592,8 @@ int PiezoStimDevice::set2PDCalibrationZ(uint8_t module, double Z0_co0, double Z0
 
 int PiezoStimDevice::set2PDDistance(uint8_t module, double distance) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_set2PDDistance(module, distance);
@@ -536,6 +604,8 @@ int PiezoStimDevice::set2PDDistance(uint8_t module, double distance)
 
 int PiezoStimDevice::set2PDHeight(uint8_t module, uint16_t promille_Z0, uint16_t promille_Z1) 
 {
+	if (bIsInitialized == false)
+		return RETURNCODE_NOTINITIALIZED;
 	if(LoadPiezoLibrary(LIBRARYFILENAME))
 	{
 		int nRetval = MyFunction_set2PDHeight(module, promille_Z0, promille_Z1);
