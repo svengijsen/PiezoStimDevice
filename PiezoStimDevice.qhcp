@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<QHelpCollectionProject version="1.0">
+<!--doc-version-qhelp-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15119145746),BrainStim version 1.0.0.1, Plugin version 1.0.0.1-->
+  <assistant>
+		<title>PiezoStimDevice plugin v1.0.0.1</title>
+    <applicationIcon>PiezoStimDevice/images/logo.jpg</applicationIcon>
+    <cacheDirectory>svengijsen/BrainStim/Plugins/PiezoStimDevice</cacheDirectory>
+    <startPage>qthelp://com.svengijsen.brainstim/doc/plugins/PiezoStimDevice/index.html</startPage>
+    <aboutMenuText>
+        <text>About PiezoStimDevice</text>
+    </aboutMenuText>
+    <aboutDialog>
+        <file>PiezoStimDevice/additional/about.txt</file>
+        <icon>PiezoStimDevice/images/logo.jpg</icon>
+    </aboutDialog>
+    <enableDocumentationManager>false</enableDocumentationManager>
+    <enableAddressBar>false</enableAddressBar>
+    <enableFilterFunctionality>false</enableFilterFunctionality>
+  </assistant>
+  <docFiles>
+  	<generate>
+    	<file>
+      	<input>PiezoStimDevice.qhp</input>
+        <output>PiezoStimDevice.qch</output>
+      </file>
+    </generate>
+    <register>
+    	<file>PiezoStimDevice.qch</file>
+    </register>
+  </docFiles>
+	</QHelpCollectionProject>
+<!--doc-version-qhelp-end-->
