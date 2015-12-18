@@ -68,7 +68,7 @@ typedef int (*MyPrototype_set2PDHeight)(uint8_t module, uint16_t promille_Z0, ui
 
 //!  The PiezoStimDevice class. 
 /*!
-  The PiezoStim Device can be used to communicate with the Piezo Stimulator device from QuaeroSys (see http://www.quaerosys.com/index.php?lang=en&page=piezostimulator).
+  The PiezoStim Device can communicate with a Piezo Stimulator device from QuaeroSys (see http://www.quaerosys.com/index.php?lang=en&page=piezostimulator).
 */
 class PiezoStimDevice : public QObject, protected QScriptable
 {
@@ -80,7 +80,7 @@ public:
 	~PiezoStimDevice();
 	PiezoStimDevice(const PiezoStimDevice& other ){Q_UNUSED(other);}//TODO fill in copy constructor, should be used for the Q_DECLARE_METATYPE macro
 
-	static QScriptValue ctor__extensionname(QScriptContext* context, QScriptEngine* engine);
+	static QScriptValue ctor_PiezoStimDevice(QScriptContext* context, QScriptEngine* engine);
 
 public slots:
 	bool makeThisAvailableInScript(QString strObjectScriptName = "", QObject *engine = NULL);//To make the objects (e.g. defined in a *.exml file) available in the script

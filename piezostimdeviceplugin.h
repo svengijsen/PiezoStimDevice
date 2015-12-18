@@ -53,6 +53,7 @@ private:
 	PiezoStimDevice_Dialog *PiezoStimDeviceDiagObject;
 
 public slots:
+	bool HasGUI() { return false; };
     bool ShowGUI();
 	bool IsCompatible() {return PluginInterface::IsCompatible();};// ExtensionInterface PluginInterface::IsCompatible();};
 	//QStringList GetAdditionalFileExtensions() {return (QStringList() << "PiezoStimDevice files (*.PiezoStimDevice);;");};

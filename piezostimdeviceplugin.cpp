@@ -42,7 +42,7 @@ int PiezoStimDevicePlugin::ConfigureScriptEngine(QScriptEngine &engine)
 {
 	QScriptValue PiezoStimDeviceProto = engine.newQObject(PiezoStimDeviceObject);
 	engine.setDefaultPrototype(qMetaTypeId<PiezoStimDevice*>(), PiezoStimDeviceProto);
-	QScriptValue PiezoStimDeviceCtor = engine.newFunction(PiezoStimDevice::ctor__extensionname, PiezoStimDeviceProto);
+	QScriptValue PiezoStimDeviceCtor = engine.newFunction(PiezoStimDevice::ctor_PiezoStimDevice, PiezoStimDeviceProto);
 	engine.globalObject().setProperty(PLUGIN_SCRIPTOBJECT_NAME, PiezoStimDeviceCtor);
 	int nMetaType = qRegisterMetaType<PiezoStimDevice>(PLUGIN_SCRIPTOBJECT_CLASS);
 	return nMetaType;
